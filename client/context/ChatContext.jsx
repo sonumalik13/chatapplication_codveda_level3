@@ -58,6 +58,37 @@ export const ChatProvider = ({ children }) => {
         }
     }
 
+
+    // ✅ clear chat function added
+ const clearChat = async () => {
+    try {
+        if (!selectedUser) return;
+
+        const { data } = await axios.delete(
+            `/api/messages/clear/${selectedUser._id}`
+        );
+
+        if (data.success) {
+            // Clear frontend messages
+            setMessages([]); 
+            
+            // Reset unseen messages for that user
+            setUnseenMessages((prev) => ({
+                ...prev,
+                [selectedUser._id]: 0
+            }));
+
+            // Show toast
+            toast.success("Chat cleared successfully!");
+        } else {
+            toast.error(data.message || "Failed to clear chat");
+        }
+    } catch (error) {
+        toast.error(error.message);
+    }
+};
+
+
     // function to subscribe to messages for selected users
 
     const subscribeToMessages = async () => {
@@ -85,10 +116,10 @@ export const ChatProvider = ({ children }) => {
     useEffect(() => {
         subscribeToMessages();
         return () => unsubscribeFromMessages();
-    }, [socket])
+    }, [socket,selectedUser])
 
     const value = {
-        messages, users, selectedUser, getUsers, getMessages, sendMessage, setSelectedUser, unseenMessages, setUnseenMessages
+        messages, users, selectedUser, getUsers, getMessages, sendMessage, setSelectedUser, unseenMessages, setUnseenMessages,clearChat
     }
 
     return (

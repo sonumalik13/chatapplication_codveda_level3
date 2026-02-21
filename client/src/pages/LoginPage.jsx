@@ -64,7 +64,7 @@ function LoginPage() {
 
          <div className='flex items-center gap-2 text-sm text-gray-500 '>
           <input type="checkbox" />
-          <p>Agree to the the terms of use && privacy policy,</p>
+          <p>Agree to the the terms of use & privacy policy,</p>
          </div>
          <div className='flex flex-col gap-2'>
           {currState==="Sign up" ? (
